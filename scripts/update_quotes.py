@@ -10,15 +10,17 @@ import yfinance as yf
 ROOT = Path(__file__).parents[1]
 OUTPUT = ROOT / "data.json"
 
-# Jeden ticker na instrument. W razie awarii pojedyncza pozycja zachowuje
-# ostatnią wycenę zamiast blokować cały snapshot.
+# Pierwszy ticker to docelowe notowanie z portfela. Przy braku danych Yahoo
+# używamy równoważnego notowania zagranicznego, aby nie blokować całego snapshotu.
 INSTRUMENTS = {
-    "IE000U9ODG19": "5J50.DE", "IE00BQT3WG13": "CNYA.L",
-    "XS2115336336": "RMAU.L", "IE000IQQEL77": "COPP.L",
-    "LU0496786574": "LYPS.DE", "IE00BKM4GZ66": "IS3N.DE",
-    "IE000LCKJ888": "PAIW.DE", "IE00B3WJKG14": "QDVE.DE",
-    "IE00BMC38736": "SMH.L", "IE00B4L5Y983": "SWDA.L",
-    "IE00B6YX5D40": "UDVD.L", "IE00B4ND3602": "SGLN.L",
+    "IE000U9ODG19": ("5J50.DE",), "IE00BQT3WG13": ("CNYA.L",),
+    "XS2115336336": ("ETCGLDRMAU.WA", "RMAU.L"),
+    "IE000IQQEL77": ("ETFHANCPPR.WA", "COPP.L"),
+    "LU0496786574": ("ETFSP500.WA", "LYPS.DE"),
+    "IE00BKM4GZ66": ("IS3N.DE",), "IE000LCKJ888": ("PAIW.DE",),
+    "IE00B3WJKG14": ("QDVE.DE",), "IE00BMC38736": ("SMH.L",),
+    "IE00B4L5Y983": ("SWDA.L",), "IE00B6YX5D40": ("UDVD.L",),
+    "IE00B4ND3602": ("SGLN.L",),
 }
 
 def scheduled_window():
@@ -54,13 +56,15 @@ def main():
     if os.getenv("GITHUB_EVENT_NAME") == "schedule" and not scheduled_window():
         return
     quotes, currencies = {}, set()
-    for isin, symbol in INSTRUMENTS.items():
-        try:
-            price, currency = latest_quote(symbol)
-            quotes[isin] = {"price": round(price, 4), "currency": currency, "symbol": symbol}
-            currencies.add(currency)
-        except Exception as error:
-            print(f"{isin} ({symbol}): {error}", file=sys.stderr)
+    for isin, symbols in INSTRUMENTS.items():
+        for symbol in symbols:
+            try:
+                price, currency = latest_quote(symbol)
+                quotes[isin] = {"price": round(price, 4), "currency": currency, "symbol": symbol}
+                currencies.add(currency)
+                break
+            except Exception as error:
+                print(f"{isin} ({symbol}): {error}", file=sys.stderr)
     if not quotes:
         raise RuntimeError("Nie udało się pobrać żadnej wyceny")
     rates = {currency: round(fx_rate(currency), 6) for currency in currencies}
