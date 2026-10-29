@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Prywatny podgląd portfela ETF i ETC." />
+    <title>Mój portfel ETF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">PRYWATNY PODGLĄD · PLN</p>
+          <h1>Mój portfel<br /><em>ETF &amp; ETC</em></h1>
+          <p class="lede">Zrozumiały widok pozycji, bez skrótów brokera.</p>
+        </div>
+        <div class="asof">
+          <span>Wycena według CSV</span>
+          <strong>ostatni import</strong>
+          <small id="timestamp">—</small>
+        </div>
+      </header>
+
+      <section class="summary" aria-label="Podsumowanie portfela">
+        <article class="total-card"><span>Wartość portfela</span><strong id="total">0 zł</strong><small>12 instrumentów · wycena w PLN</small></article>
+        <article><span>Największa pozycja</span><strong id="largest">—</strong><small id="largest-detail">—</small></article>
+        <article><span>Rynki rozwinięte</span><strong id="developed">—</strong><small>MSCI World + S&amp;P 500</small></article>
+      </section>
+
+      <section class="allocation panel">
+        <div class="section-head"><div><p class="eyebrow">ALOKACJA</p><h2>Co buduje portfel?</h2></div><p>Udział liczony według wyceny mBank w PLN.</p></div>
+        <div id="allocation" class="allocation-list"></div>
+      </section>
+
+      <section class="holdings panel">
+        <div class="section-head holdings-head"><div><p class="eyebrow">POZYCJE</p><h2>Pełna lista instrumentów</h2></div><div class="controls"><label><span class="sr-only">Szukaj</span><input id="search" type="search" placeholder="Szukaj ETF, indeksu, ISIN…" /></label><select id="filter"><option value="all">Wszystkie klasy</option><option value="ETF">ETF</option><option value="ETC">ETC</option></select></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Instrument</th><th>Ekspozycja</th><th>Giełda</th><th class="numeric">Liczba</th><th class="numeric">Kurs</th><th class="numeric sortable" data-sort="value">Wartość <span>↕</span></th><th class="numeric">Udział</th></tr></thead><tbody id="rows"></tbody></table></div>
+      </section>
+
+      <footer><p>To prywatny podgląd informacyjny — nie rekomendacja inwestycyjna.</p><p>Źródło wyceny: eksport CSV z mBanku.</p></footer>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
