@@ -1,0 +1,34 @@
+name: Aktualizuj kursy portfela
+
+on:
+  schedule:
+    # Dwa warianty UTC dla czasu letniego i zimowego; skrypt wybiera właściwy.
+    - cron: '45 7,8 * * 1-5'    # 09:45 w Europie/Warszawie
+    - cron: '45 13,14 * * 1-5'  # 09:45 w America/New_York
+    - cron: '15 20,21 * * 1-5'  # 16:15 w America/New_York
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --disable-pip-version-check yfinance==0.2.66
+      - run: python scripts/update_quotes.py
+      - name: Zapisz nowy snapshot
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "Brak zmian do zapisania"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Aktualizuj kursy portfela"
+          git push

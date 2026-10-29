@@ -12,19 +12,54 @@ const holdings = [
   {isin:'IE00B6YX5D40',name:'SPDR S&P U.S. Dividend Aristocrats UCITS ETF',short:'Amerykańskie spółki dywidendowe',type:'ETF',exchange:'LSE',qty:10,price:87.93,currency:'USD',value:3470.86,group:'Rynki rozwinięte'},
   {isin:'IE00B4ND3602',name:'iShares Physical Gold ETC',short:'Złoto fizyczne',type:'ETC',exchange:'LSE',qty:1,price:58.59,currency:'GBP',value:307.86,group:'Surowce'}
 ];
+
 const pln = new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN',maximumFractionDigits:2});
-const total = holdings.reduce((sum,x)=>sum+x.value,0);
-const fmt = x => pln.format(x); const pct=x=>`${(x/total*100).toFixed(1)}%`;
-document.querySelector('#total').textContent=fmt(total);
-const largest=[...holdings].sort((a,b)=>b.value-a.value)[0];
-document.querySelector('#largest').textContent=largest.short;
-document.querySelector('#largest-detail').textContent=`${fmt(largest.value)} · ${pct(largest.value)} portfela`;
-const developed=holdings.filter(x=>x.group==='Rynki rozwinięte').reduce((s,x)=>s+x.value,0);
-document.querySelector('#developed').textContent=pct(developed);
-document.querySelector('#timestamp').textContent=new Intl.DateTimeFormat('pl-PL',{dateStyle:'long'}).format(new Date());
-const colors=['#b9eb68','#9ed6e1','#ffc57a','#d8c7ff'];
-const groups=Object.entries(holdings.reduce((a,x)=>((a[x.group]=(a[x.group]||0)+x.value),a),{}));
-document.querySelector('#allocation').innerHTML=groups.map(([name,value],i)=>`<div class="allocation-item" style="--accent:${colors[i]}"><strong>${pct(value)}</strong><span>${name}</span><span>${fmt(value)}</span></div>`).join('');
-let sortDescending=true;
-function render(){const q=document.querySelector('#search').value.toLowerCase();const kind=document.querySelector('#filter').value;let data=holdings.filter(x=>(kind==='all'||x.type===kind)&&`${x.name} ${x.short} ${x.isin}`.toLowerCase().includes(q));data.sort((a,b)=>sortDescending?b.value-a.value:a.value-b.value);document.querySelector('#rows').innerHTML=data.map(x=>`<tr><td><span class="name">${x.name}</span><span class="isin">${x.isin}</span></td><td><span class="tag">${x.short}</span></td><td>${x.exchange}</td><td class="numeric">${x.qty}</td><td class="numeric">${x.price.toLocaleString('pl-PL')} ${x.currency}</td><td class="numeric">${fmt(x.value)}</td><td class="numeric"><span class="share">${pct(x.value)}</span></td></tr>`).join('');}
-document.querySelector('#search').addEventListener('input',render);document.querySelector('#filter').addEventListener('change',render);document.querySelector('.sortable').addEventListener('click',()=>{sortDescending=!sortDescending;render()});render();
+const fmt = x => pln.format(x);
+let sortDescending = true;
+
+function render(updatedAt, source) {
+  const total = holdings.reduce((sum,x)=>sum+x.value,0);
+  const pct = x => `${(x / total * 100).toFixed(1)}%`;
+  document.querySelector('#total').textContent = fmt(total);
+  const largest = [...holdings].sort((a,b)=>b.value-a.value)[0];
+  document.querySelector('#largest').textContent = largest.short;
+  document.querySelector('#largest-detail').textContent = `${fmt(largest.value)} · ${pct(largest.value)} portfela`;
+  const developed = holdings.filter(x=>x.group==='Rynki rozwinięte').reduce((s,x)=>s+x.value,0);
+  document.querySelector('#developed').textContent = pct(developed);
+  document.querySelector('#timestamp').textContent = updatedAt || 'snapshot CSV';
+  document.querySelector('#quote-source').textContent = source || 'Źródło wyceny: eksport CSV z mBanku.';
+  const colors=['#b9eb68','#9ed6e1','#ffc57a','#d8c7ff'];
+  const groups=Object.entries(holdings.reduce((a,x)=>((a[x.group]=(a[x.group]||0)+x.value),a),{}));
+  document.querySelector('#allocation').innerHTML=groups.map(([name,value],i)=>`<div class="allocation-item" style="--accent:${colors[i]}"><strong>${pct(value)}</strong><span>${name}</span><span>${fmt(value)}</span></div>`).join('');
+  const drawRows = () => {
+    const q=document.querySelector('#search').value.toLowerCase();
+    const kind=document.querySelector('#filter').value;
+    const data=holdings.filter(x=>(kind==='all'||x.type===kind)&&`${x.name} ${x.short} ${x.isin}`.toLowerCase().includes(q)).sort((a,b)=>sortDescending?b.value-a.value:a.value-b.value);
+    document.querySelector('#rows').innerHTML=data.map(x=>`<tr><td><span class="name">${x.name}</span><span class="isin">${x.isin}</span></td><td><span class="tag">${x.short}</span></td><td>${x.exchange}</td><td class="numeric">${x.qty}</td><td class="numeric">${x.price.toLocaleString('pl-PL',{maximumFractionDigits:4})} ${x.currency}</td><td class="numeric">${fmt(x.value)}</td><td class="numeric"><span class="share">${pct(x.value)}</span></td></tr>`).join('');
+  };
+  document.querySelector('#search').oninput=drawRows;
+  document.querySelector('#filter').onchange=drawRows;
+  document.querySelector('.sortable').onclick=()=>{sortDescending=!sortDescending;drawRows()};
+  drawRows();
+}
+
+async function loadQuotes() {
+  try {
+    const response = await fetch(`./data.json?v=${Date.now()}`, {cache:'no-store'});
+    const data = await response.json();
+    if (!data.quotes || !data.fxRates) throw new Error('Brak aktualnych danych');
+    holdings.forEach(position => {
+      const quote = data.quotes[position.isin];
+      if (!quote) return;
+      position.price = quote.price;
+      position.currency = quote.currency;
+      position.value = quote.price * position.qty * (data.fxRates[quote.currency] || 1);
+    });
+    const date = new Intl.DateTimeFormat('pl-PL',{dateStyle:'medium',timeStyle:'short',timeZone:'Europe/Warsaw'}).format(new Date(data.updatedAt));
+    render(date, `Kursy: Yahoo Finance · automatyczna aktualizacja · ${data.successfulQuotes}/${holdings.length} instrumentów.`);
+  } catch {
+    render(null, 'Źródło wyceny: eksport CSV z mBanku. Automatyczne kursy będą widoczne po pierwszym udanym odświeżeniu.');
+  }
+}
+
+loadQuotes();
