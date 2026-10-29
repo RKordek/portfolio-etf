@@ -1,6 +1,71 @@
 {
-  "updatedAt": null,
-  "quotes": {},
-  "fxRates": {},
-  "successfulQuotes": 0
+  "updatedAt": "2026-10-29T15:17:37.365111+01:00",
+  "quotes": {
+    "IE000U9ODG19": {
+      "price": 8.045,
+      "currency": "EUR",
+      "symbol": "5J50.DE"
+    },
+    "IE00BQT3WG13": {
+      "price": 5.21,
+      "currency": "USD",
+      "symbol": "CNYA.L"
+    },
+    "XS2115336336": {
+      "price": 39.5825,
+      "currency": "USD",
+      "symbol": "RMAU.L"
+    },
+    "IE000IQQEL77": {
+      "price": 15.81,
+      "currency": "GBP",
+      "symbol": "COPP.L"
+    },
+    "LU0496786574": {
+      "price": 71.524,
+      "currency": "EUR",
+      "symbol": "LYPS.DE"
+    },
+    "IE00BKM4GZ66": {
+      "price": 46.027,
+      "currency": "EUR",
+      "symbol": "IS3N.DE"
+    },
+    "IE000LCKJ888": {
+      "price": 17.9,
+      "currency": "EUR",
+      "symbol": "PAIW.DE"
+    },
+    "IE00B3WJKG14": {
+      "price": 46.87,
+      "currency": "EUR",
+      "symbol": "QDVE.DE"
+    },
+    "IE00BMC38736": {
+      "price": 104.5,
+      "currency": "USD",
+      "symbol": "SMH.L"
+    },
+    "IE00B4L5Y983": {
+      "price": 110.1398,
+      "currency": "GBP",
+      "symbol": "SWDA.L"
+    },
+    "IE00B6YX5D40": {
+      "price": 87.99,
+      "currency": "USD",
+      "symbol": "UDVD.L"
+    },
+    "IE00B4ND3602": {
+      "price": 58.5877,
+      "currency": "GBP",
+      "symbol": "SGLN.L"
+    }
+  },
+  "fxRates": {
+    "EUR": 4.39342,
+    "USD": 3.94494,
+    "GBP": 5.25727
+  },
+  "successfulQuotes": 12
 }
