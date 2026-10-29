@@ -4,10 +4,10 @@ Prosty, statyczny dashboard z czytelnymi nazwami instrumentów, wyceną w PLN i 
 
 ## Uruchomienie
 
-Otwórz `dist/index.html` w przeglądarce. Projekt nie wymaga instalowania zależności ani serwera.
+Otwórz `index.html` w przeglądarce. Projekt nie wymaga instalowania zależności ani serwera.
 
 ## Dane
 
-Wycena i liczba jednostek pochodzą z ręcznie zaimportowanego eksportu CSV z mBanku. Aby zaktualizować dane, edytuj tablicę `holdings` w `dist/app.js`.
+Wycena i liczba jednostek pochodzą z ręcznie zaimportowanego eksportu CSV z mBanku. Aby zaktualizować dane, edytuj tablicę `holdings` w `app.js`.
 
 To projekt informacyjny, nie rekomendacja inwestycyjna.
