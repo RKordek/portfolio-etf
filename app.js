@@ -47,7 +47,7 @@ async function loadQuotes() {
   try {
     const response = await fetch(`./data.json?v=${Date.now()}`, {cache:'no-store'});
     const data = await response.json();
-    if (!data.quotes || !data.fxRates) throw new Error('Brak aktualnych danych');
+    if (!data.quotes || !data.fxRates || Object.keys(data.quotes).length === 0) throw new Error('Brak aktualnych danych');
     holdings.forEach(position => {
       const quote = data.quotes[position.isin];
       if (!quote) return;
