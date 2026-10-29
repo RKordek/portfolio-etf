@@ -1,71 +1,72 @@
 {
-  "updatedAt": "2026-10-29T15:17:37.365111+01:00",
+  "updatedAt": "2026-10-29T15:31:34.798348+01:00",
   "quotes": {
     "IE000U9ODG19": {
-      "price": 8.045,
+      "price": 8.08,
       "currency": "EUR",
       "symbol": "5J50.DE"
     },
     "IE00BQT3WG13": {
-      "price": 5.21,
+      "price": 5.215,
       "currency": "USD",
       "symbol": "CNYA.L"
     },
     "XS2115336336": {
-      "price": 39.5825,
-      "currency": "USD",
-      "symbol": "RMAU.L"
+      "price": 156.6,
+      "currency": "PLN",
+      "symbol": "ETCGLDRMAU.WA"
     },
     "IE000IQQEL77": {
-      "price": 15.81,
-      "currency": "GBP",
-      "symbol": "COPP.L"
+      "price": 84.12,
+      "currency": "PLN",
+      "symbol": "ETFHANCPPR.WA"
     },
     "LU0496786574": {
-      "price": 71.524,
-      "currency": "EUR",
-      "symbol": "LYPS.DE"
+      "price": 316.65,
+      "currency": "PLN",
+      "symbol": "ETFSP500.WA"
     },
     "IE00BKM4GZ66": {
-      "price": 46.027,
+      "price": 46.0,
       "currency": "EUR",
       "symbol": "IS3N.DE"
     },
     "IE000LCKJ888": {
-      "price": 17.9,
+      "price": 17.966,
       "currency": "EUR",
       "symbol": "PAIW.DE"
     },
     "IE00B3WJKG14": {
-      "price": 46.87,
+      "price": 46.845,
       "currency": "EUR",
       "symbol": "QDVE.DE"
     },
     "IE00BMC38736": {
-      "price": 104.5,
+      "price": 104.22,
       "currency": "USD",
       "symbol": "SMH.L"
     },
     "IE00B4L5Y983": {
-      "price": 110.1398,
+      "price": 110.04,
       "currency": "GBP",
       "symbol": "SWDA.L"
     },
     "IE00B6YX5D40": {
-      "price": 87.99,
+      "price": 88.03,
       "currency": "USD",
       "symbol": "UDVD.L"
     },
     "IE00B4ND3602": {
-      "price": 58.5877,
+      "price": 58.51,
       "currency": "GBP",
       "symbol": "SGLN.L"
     }
   },
   "fxRates": {
-    "EUR": 4.39342,
-    "USD": 3.94494,
-    "GBP": 5.25727
+    "PLN": 1.0,
+    "EUR": 4.3908,
+    "GBP": 5.25354,
+    "USD": 3.93863
   },
   "successfulQuotes": 12
 }
