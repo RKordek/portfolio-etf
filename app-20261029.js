@@ -1,3 +1,4 @@
+// Versioned filename avoids stale GitHub Pages asset caches after deployments.
 const holdings = [
   {isin:'IE000U9ODG19',name:'iShares Global Aerospace & Defence UCITS ETF',short:'Obrona i lotnictwo',type:'ETF',exchange:'Xetra',qty:120,price:7.88,cost:8.00,costCurrency:'EUR',currency:'EUR',value:4156.01,group:'Sektory'},
   {isin:'IE00BQT3WG13',name:'iShares MSCI China A UCITS ETF',short:'Akcje chińskie A',type:'ETF',exchange:'LSE',qty:80,price:5.30,cost:4.38,costCurrency:'USD',currency:'USD',value:1672.08,group:'Rynki wschodzące'},
